@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Клікер Гра</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #e0f7fa;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 2em;
+    }
+
+    #score {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 15px 25px;
+      font-size: 18px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      max-width: 300px;
+      transition: transform 0.1s ease;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    #clickButton {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    #clickButton:hover {
+      background-color: #45a049;
+    }
+
+    #upgradeButton {
+      background-color: #2196F3;
+      color: white;
+    }
+
+    #upgradeButton:hover {
+      background-color: #1976D2;
+    }
+
+    #upgradeCost {
+      font-size: 16px;
+      color: #555;
+    }
+
+    @media (min-width: 600px) {
+      button {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Гра Клікер</h1>
+  <div id="score">Бали: 0</div>
+  <button id="clickButton">Клікни мене!</button>
+  <button id="upgradeButton">Покращити клік (+1)</button>
+  <div id="upgradeCost">Вартість покращення: 10</div>
+
+  <script>
+    let score = parseInt(localStorage.getItem('score')) || 0;
+    let pointsPerClick = parseInt(localStorage.getItem('pointsPerClick')) || 1;
+    let upgradeCost = parseInt(localStorage.getItem('upgradeCost')) || 10;
+
+    const scoreDisplay = document.getElementById('score');
+    const clickButton = document.getElementById('clickButton');
+    const upgradeButton = document.getElementById('upgradeButton');
+    const upgradeCostDisplay = document.getElementById('upgradeCost');
+
+    function updateDisplay() {
+      scoreDisplay.textContent = `Бали: ${score}`;
+      upgradeCostDisplay.textContent = `Вартість покращення: ${upgradeCost}`;
+    }
+
+    function saveProgress() {
+      localStorage.setItem('score', score);
+      localStorage.setItem('pointsPerClick', pointsPerClick);
+      localStorage.setItem('upgradeCost', upgradeCost);
+    }
+
+    clickButton.addEventListener('click', () => {
+      score += pointsPerClick;
+      updateDisplay();
+      saveProgress();
+    });
+
+    upgradeButton.addEventListener('click', () => {
+      if (score >= upgradeCost) {
+        score -= upgradeCost;
+        pointsPerClick += 1;
+        upgradeCost = Math.floor(upgradeCost * 1.5);
+        updateDisplay();
+        saveProgress();
+      } else {
+        alert("Недостатньо балів для покращення!");
+      }
+    });
+
+    updateDisplay();
+  </script>
+</body>
+</html>
